@@ -1,0 +1,29 @@
+package com.georgeampartzidis.bakie.ui;
+
+import android.support.v4.app.FragmentManager;
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+import com.georgeampartzidis.bakie.R;
+
+public class RecipeActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_recipe);
+
+        if(savedInstanceState== null){
+            RecipeStepsFragment recipeSteps= new RecipeStepsFragment();
+            recipeSteps.setArguments(getIntent().getExtras());
+            FragmentManager fragmentManager= getSupportFragmentManager();
+
+            fragmentManager.beginTransaction()
+                    .add(R.id.recipe_container, recipeSteps)
+                    .commit();
+        }
+
+    }
+
+}

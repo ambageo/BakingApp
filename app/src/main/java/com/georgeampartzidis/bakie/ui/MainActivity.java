@@ -1,5 +1,6 @@
 package com.georgeampartzidis.bakie.ui;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,9 +25,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RecipeAdapter.RecipeClickListener{
 
     private final static String LOG_TAG = MainActivity.class.getSimpleName();
+    public static final String RECIPE_KEY= "recipe-key";
     public static final String URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
 
     private RecyclerView mRecyclerView;
@@ -47,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 LinearLayoutManager.VERTICAL, false);
 
         mRecyclerView.setLayoutManager(layoutManager);
-        mRecipeAdapter = new RecipeAdapter(this, mRecipeArrayList);
+        mRecipeAdapter = new RecipeAdapter(this, mRecipeArrayList, this);
         mRecyclerView.setAdapter(mRecipeAdapter);
 
 
@@ -85,4 +87,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onRecipeClick(int clickedRecipeIndex) {
+        Recipe recipe= mRecipeArrayList.get(clickedRecipeIndex);
+        Toast.makeText(this, "Clicked on "
+                + recipe.getName(), Toast.LENGTH_SHORT).show();
+        Intent recipeIntent= new Intent(this, RecipeActivity.class);
+        recipeIntent.putExtra(RECIPE_KEY, recipe);
+        startActivity(recipeIntent);
+
+    }
 }

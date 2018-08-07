@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.georgeampartzidis.bakie.R;
 import com.georgeampartzidis.bakie.model.Recipe;
@@ -18,10 +19,16 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
     ArrayList<Recipe> mRecipesList;
     Context mContext;
+    final private RecipeClickListener mOnClickListener;
 
-    public RecipeAdapter(Context context, ArrayList<Recipe> recipesList){
+    public interface RecipeClickListener {
+        void onRecipeClick(int clickedRecipeIndex);
+    }
+
+    public RecipeAdapter(Context context, ArrayList<Recipe> recipesList, RecipeClickListener listener){
         this.mContext= context;
         this.mRecipesList= recipesList;
+        this.mOnClickListener= listener;
     }
 
     @Override
@@ -44,7 +51,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         return 0;
     }
 
-    public class RecipeViewHolder extends RecyclerView.ViewHolder {
+    class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView recipeImageView;
         TextView recipeTitleTextVIew;
@@ -53,10 +60,17 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             super(itemView);
             recipeImageView = itemView.findViewById(R.id.iv_recipe_image);
             recipeTitleTextVIew = itemView.findViewById(R.id.tv_recipe_name);
+            itemView.setOnClickListener(this);
         }
 
         public void bindTo(Recipe recipe) {
             recipeTitleTextVIew.setText(recipe.getName());
+        }
+
+        @Override
+        public void onClick(View v) {
+            int clickedPosition= getAdapterPosition();
+            mOnClickListener.onRecipeClick(clickedPosition);
         }
     }
 }
