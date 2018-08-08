@@ -9,21 +9,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.georgeampartzidis.bakie.R;
+import com.georgeampartzidis.bakie.model.Ingredient;
 import com.georgeampartzidis.bakie.model.Recipe;
+import com.georgeampartzidis.bakie.model.Step;
+
+import java.util.ArrayList;
 
 
 public class RecipeStepsFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private static final String LOG_TAG = RecipeStepsFragment.class.getSimpleName();
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String LOG_TAG = RecipeStepsFragment.class.getSimpleName();
+    private TextView recipesTextView;
+    private Recipe mRecipe;
 
     /*private OnFragmentInteractionListener mListener;*/
 
@@ -35,17 +35,39 @@ public class RecipeStepsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent= getActivity().getIntent();
-        Bundle recipeBundle= intent.getExtras();
-        Recipe recipe= recipeBundle.getParcelable(MainActivity.RECIPE_KEY);
-        Log.i(LOG_TAG, "Name of recipe passed: " + recipe.getName());
+
+        Bundle recipeBundle= this.getArguments();
+        if(recipeBundle != null){
+            mRecipe= recipeBundle.getParcelable(MainActivity.RECIPE_KEY);
+        }
+
+       /* Log.i(LOG_TAG, "Recipe passed: " + mRecipe.getName()
+        + ", no. of steps: " + String.valueOf(mRecipe.getSteps().size())
+        + ", no. of ingredients " + String.valueOf(mRecipe.getIngredients().size()));
+        ArrayList<Ingredient> ingredientList= mRecipe.getIngredients();
+        for (int i=0; i<ingredientList.size(); i++){
+
+            Log.d(LOG_TAG, "" + ingredientList.get(i).getIngredient());
+        }*/
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_recipe_steps, container, false);
+        View view= inflater.inflate(R.layout.fragment_recipe_steps, container, false);
+
+        recipesTextView= view.findViewById(R.id.tv_recipe_contents);
+
+        /*StringBuilder builder= new StringBuilder();
+        for( Ingredient ingredient: mRecipe.getIngredients()){
+            builder.append(ingredient.getIngredient()+ "\n");
+        }
+        recipesTextView.setText(builder.toString());*/
+
+
+                return view;
     }
 
    /* // TODO: Rename method, update argument and hook method into UI event

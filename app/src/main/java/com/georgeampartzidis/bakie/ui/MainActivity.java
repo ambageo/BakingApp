@@ -18,6 +18,8 @@ import com.android.volley.toolbox.Volley;
 import com.georgeampartzidis.bakie.R;
 import com.georgeampartzidis.bakie.adapters.RecipeAdapter;
 import com.georgeampartzidis.bakie.model.Recipe;
+import com.georgeampartzidis.bakie.model.Ingredient;
+import com.georgeampartzidis.bakie.model.Step;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,11 +68,40 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
                         for (int i = 0; i < response.length(); i++)
                             try {
                                 JSONObject jsonRecipe = response.getJSONObject(i);
+                                JSONArray ingredientsJsonArray= jsonRecipe.getJSONArray("ingredients");
+                                JSONArray stepsJsonArray= jsonRecipe.getJSONArray("steps");
+
+                                ArrayList<Ingredient> ingredientsArrayList= new ArrayList<>();
+                                for(int j=0; j<ingredientsJsonArray.length(); j++){
+                                    JSONObject jsonIngredient= ingredientsJsonArray.getJSONObject(j);
+                                    long quantity= jsonIngredient.optInt("quantity");
+                                    String measure= jsonIngredient.optString("measure");
+                                    String ingredientString= jsonIngredient.optString("ingredient");
+                                    Ingredient ingredient= new Ingredient(quantity, measure, ingredientString);
+                                    ingredientsArrayList.add(ingredient);
+
+                                    Log.d(LOG_TAG, "Ingredient added: "
+                                    + String.valueOf(quantity) + " "
+                                    + measure + " "
+                                    + ingredientString);
+                                }
+
+                                ArrayList<Step> stepsArrayList= new ArrayList<>();
+                                for(int k=0; k<stepsJsonArray.length(); k++){
+                                    JSONObject jsonStep= stepsJsonArray.getJSONObject(k);
+                                    Step step= new Step(jsonStep);
+                                    stepsArrayList.add(step);
+
+                                }
                                 Recipe recipe = new Recipe(jsonRecipe);
+                                recipe.setIngredients(ingredientsArrayList);
+                                recipe.setSteps(stepsArrayList);
                                 mRecipeArrayList.add(recipe);
-                                Log.i(LOG_TAG, "Recipe is: " + recipe.getName());
+                                Log.i(LOG_TAG, "Recipe added: " + recipe.getName()
+                                + " ingredients: " + String.valueOf(recipe.getIngredients().size())
+                                + " steps: " + String.valueOf(recipe.getSteps().size()));
                                 mRecipeAdapter.notifyDataSetChanged();
-                            } catch (JSONException e) {
+                            } catch (Exception e) {
                                 e.printStackTrace();
                                 Log.e(LOG_TAG, "Error: " + e.getMessage());
                             }
@@ -88,8 +119,13 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
 
 
     @Override
-    public void onRecipeClick(int clickedRecipeIndex) {
-        Recipe recipe= mRecipeArrayList.get(clickedRecipeIndex);
+    public void onRecipeClick(int clickedRecipePosition) {
+        Recipe recipe= mRecipeArrayList.get(clickedRecipePosition);
+        Log.d(LOG_TAG, "Recipe no: " + String.valueOf(clickedRecipePosition));
+        ArrayList<Ingredient> ingredientsList= recipe.getIngredients();
+        for(Ingredient ingredient: ingredientsList){
+            Log.d(LOG_TAG, "Ingredient: " + ingredient.getIngredient() + "\n");
+        }
         Toast.makeText(this, "Clicked on "
                 + recipe.getName(), Toast.LENGTH_SHORT).show();
         Intent recipeIntent= new Intent(this, RecipeActivity.class);

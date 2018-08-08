@@ -3,17 +3,26 @@ package com.georgeampartzidis.bakie.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-class Ingredient implements Parcelable {
+import org.json.JSONObject;
 
-    private float quantity;
+public class Ingredient implements Parcelable {
+
+    private long quantity;
     private String measure;
     private String ingredient;
 
+    public Ingredient(){}
+
+    public Ingredient (long quantity, String measure, String ingredient){
+        this.quantity= quantity;
+        this.measure= measure;
+        this.ingredient= ingredient;
+    }
     public float getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(float quantity) {
+    public void setQuantity(long quantity) {
         this.quantity = quantity;
     }
 
@@ -46,7 +55,7 @@ class Ingredient implements Parcelable {
     }
 
     private Ingredient(Parcel parcel) {
-        quantity = parcel.readFloat();
+        quantity = parcel.readLong();
         measure = parcel.readString();
         ingredient = parcel.readString();
     }

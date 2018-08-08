@@ -3,13 +3,26 @@ package com.georgeampartzidis.bakie.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-class Step implements Parcelable {
+import org.json.JSONObject;
+
+public class Step implements Parcelable {
 
     private int id;
     private String shortDescription;
     private String detailedDescription;
     private String videoUrl;
     private String thumbnailUrl;
+
+    public Step(){}
+
+    public Step(JSONObject jsonStep) throws Exception{
+        this.id= jsonStep.getInt("id");
+        this.shortDescription= jsonStep.optString("shortDescription");
+        this.detailedDescription= jsonStep.optString("detailedDescription");
+        this.videoUrl= jsonStep.optString("videoUrl");
+        this.thumbnailUrl= jsonStep.optString("thumbnailUrl");
+
+    }
 
     public int getId() {
         return id;

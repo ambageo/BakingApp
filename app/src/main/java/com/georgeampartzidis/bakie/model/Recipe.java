@@ -23,6 +23,7 @@ public class Recipe implements Parcelable {
         this.name= jsonRecipe.getString("name");
         this.servings= jsonRecipe.getInt("servings");
         this.image= jsonRecipe.getString("image");
+
     }
 
     public int getId() {
@@ -61,16 +62,16 @@ public class Recipe implements Parcelable {
         return ingredients;
     }
 
-    public void setIngredients() {
-        this.ingredients = ingredients;
+    public void setIngredients(ArrayList<Ingredient> recipeIngredients) {
+        this.ingredients = recipeIngredients;
     }
 
     public ArrayList<Step> getSteps() {
         return steps;
     }
 
-    public void setSteps() {
-        this.steps = steps;
+    public void setSteps( ArrayList<Step> recipeSteps) {
+        this.steps = recipeSteps;
     }
 
     @Override
