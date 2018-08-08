@@ -42,20 +42,20 @@ public class Recipe implements Parcelable {
         this.name = name;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage() {
-        this.image = image;
-    }
-
     public int getServings() {
         return servings;
     }
 
     public void setServings(int servings) {
         this.servings = servings;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage() {
+        this.image = image;
     }
 
     public ArrayList<Ingredient> getIngredients() {
@@ -94,15 +94,19 @@ public class Recipe implements Parcelable {
         name = parcel.readString();
         servings = parcel.readInt();
         image = parcel.readString();
-        ingredients = parcel.createTypedArrayList(Ingredient.CREATOR);
-        steps = parcel.createTypedArrayList(Step.CREATOR);
+        ingredients= new ArrayList<>();
+        parcel.readTypedList(ingredients, Ingredient.CREATOR);
+        //ingredients = parcel.createTypedArrayList(Ingredient.CREATOR);
+        steps= new ArrayList<>();
+        parcel.readTypedList(steps, Step.CREATOR);
+        //steps = parcel.createTypedArrayList(Step.CREATOR);
     }
 
     public static final Parcelable.Creator<Recipe> CREATOR
             = new Parcelable.Creator<Recipe>() {
 
-        public Recipe createFromParcel(Parcel in) {
-            return new Recipe(in);
+        public Recipe createFromParcel(Parcel parcel) {
+            return new Recipe(parcel);
         }
 
         public Recipe[] newArray(int size) {

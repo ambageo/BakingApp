@@ -77,7 +77,11 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
                                     long quantity= jsonIngredient.optInt("quantity");
                                     String measure= jsonIngredient.optString("measure");
                                     String ingredientString= jsonIngredient.optString("ingredient");
-                                    Ingredient ingredient= new Ingredient(quantity, measure, ingredientString);
+                                    //Ingredient ingredient= new Ingredient(quantity, measure, ingredientString);
+                                    Ingredient ingredient= new Ingredient();
+                                    ingredient.setQuantity(quantity);
+                                    ingredient.setMeasure(measure);
+                                    ingredient.setIngredient(ingredientString);
                                     ingredientsArrayList.add(ingredient);
 
                                     Log.d(LOG_TAG, "Ingredient added: "
@@ -121,11 +125,10 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
     @Override
     public void onRecipeClick(int clickedRecipePosition) {
         Recipe recipe= mRecipeArrayList.get(clickedRecipePosition);
-        Log.d(LOG_TAG, "Recipe no: " + String.valueOf(clickedRecipePosition));
-        ArrayList<Ingredient> ingredientsList= recipe.getIngredients();
+       /* ArrayList<Ingredient> ingredientsList= recipe.getIngredients();
         for(Ingredient ingredient: ingredientsList){
             Log.d(LOG_TAG, "Ingredient: " + ingredient.getIngredient() + "\n");
-        }
+        }*/
         Toast.makeText(this, "Clicked on "
                 + recipe.getName(), Toast.LENGTH_SHORT).show();
         Intent recipeIntent= new Intent(this, RecipeActivity.class);

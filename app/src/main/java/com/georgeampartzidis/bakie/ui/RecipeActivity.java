@@ -24,9 +24,11 @@ public class RecipeActivity extends AppCompatActivity {
 
         if(savedInstanceState== null){
            // RecipeStepsFragment recipeSteps= new RecipeStepsFragment();
-           Recipe recipe= getIntent().getParcelableExtra(MainActivity.RECIPE_KEY);
+           Recipe recipe= getIntent().getExtras().getParcelable(MainActivity.RECIPE_KEY);
+           int recipeNumber= recipe.getId();
+           String recipeString= recipe.getName();
             ArrayList<Ingredient> ingredientsList= recipe.getIngredients();
-            Log.d(LOG_TAG, "Recipe clicked is: " + recipe.getName());
+            Log.d(LOG_TAG, "Recipe clicked is: " + recipeString);
             for(Ingredient ingredient: ingredientsList){
                 Log.d(LOG_TAG, "Ingredient: " + ingredient.getIngredient() + "\n");
             }
