@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/RecipeCardView"
     android:layout_width="match_parent"
-    android:layout_height="136dp"
-    android:layout_marginLeft="@dimen/vertical_margin"
-    android:layout_marginRight="@dimen/vertical_margin"
-    android:layout_marginTop="@dimen/horizontal_margin"
-    android:background="@color/colorListItem"
-    android:elevation="4dp">
+    android:layout_height="136dp">
 
     <ImageView
         android:id="@+id/iv_recipe_image"

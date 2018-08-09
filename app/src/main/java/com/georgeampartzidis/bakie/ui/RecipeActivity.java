@@ -23,17 +23,12 @@ public class RecipeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recipe);
 
         if(savedInstanceState== null){
-           // RecipeStepsFragment recipeSteps= new RecipeStepsFragment();
+
            Recipe recipe= getIntent().getExtras().getParcelable(MainActivity.RECIPE_KEY);
-           int recipeNumber= recipe.getId();
            String recipeString= recipe.getName();
             ArrayList<Ingredient> ingredientsList= recipe.getIngredients();
             Log.d(LOG_TAG, "Recipe clicked is: " + recipeString);
-            for(Ingredient ingredient: ingredientsList){
-                Log.d(LOG_TAG, "Ingredient: " + ingredient.getIngredient() + "\n");
-            }
-           Bundle args= new Bundle();
-           args.putParcelable(MainActivity.RECIPE_KEY, recipe);
+
             /*if (bundle.containsKey(MainActivity.RECIPE_KEY)){
                 Recipe recipe= bundle.getParcelable(MainActivity.RECIPE_KEY);
                 String recipeString= recipe.getName();
@@ -45,13 +40,15 @@ public class RecipeActivity extends AppCompatActivity {
                 + ", No. of steps: " + String.valueOf(recipeNoOfSteps), Toast.LENGTH_LONG).show();*//*
             }*/
 
-
-           /* recipeSteps.setArguments(args);
+            RecipeStepsFragment recipeSteps= new RecipeStepsFragment();
+            Bundle recipeBundle= new Bundle();
+            recipeBundle.putParcelable(MainActivity.RECIPE_KEY, recipe);
+            recipeSteps.setArguments(recipeBundle);
             FragmentManager fragmentManager= getSupportFragmentManager();
 
             fragmentManager.beginTransaction()
                     .add(R.id.recipe_container, recipeSteps)
-                    .commit();*/
+                    .commit();
         }
 
     }

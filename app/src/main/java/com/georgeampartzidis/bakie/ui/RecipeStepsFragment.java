@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.georgeampartzidis.bakie.R;
+import com.georgeampartzidis.bakie.adapters.RecipeStepsAdapter;
 import com.georgeampartzidis.bakie.model.Ingredient;
 import com.georgeampartzidis.bakie.model.Recipe;
 import com.georgeampartzidis.bakie.model.Step;
@@ -24,6 +27,7 @@ public class RecipeStepsFragment extends Fragment {
     private static final String LOG_TAG = RecipeStepsFragment.class.getSimpleName();
     private TextView recipesTextView;
     private Recipe mRecipe;
+    private RecyclerView mRecyclerView;
 
     /*private OnFragmentInteractionListener mListener;*/
 
@@ -36,38 +40,41 @@ public class RecipeStepsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Bundle recipeBundle= this.getArguments();
-        if(recipeBundle != null){
-            mRecipe= recipeBundle.getParcelable(MainActivity.RECIPE_KEY);
-        }
-
-       /* Log.i(LOG_TAG, "Recipe passed: " + mRecipe.getName()
-        + ", no. of steps: " + String.valueOf(mRecipe.getSteps().size())
-        + ", no. of ingredients " + String.valueOf(mRecipe.getIngredients().size()));
-        ArrayList<Ingredient> ingredientList= mRecipe.getIngredients();
-        for (int i=0; i<ingredientList.size(); i++){
-
-            Log.d(LOG_TAG, "" + ingredientList.get(i).getIngredient());
-        }*/
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_recipe_steps, container, false);
-
-        recipesTextView= view.findViewById(R.id.tv_recipe_contents);
-
-        /*StringBuilder builder= new StringBuilder();
-        for( Ingredient ingredient: mRecipe.getIngredients()){
-            builder.append(ingredient.getIngredient()+ "\n");
+        View view = inflater.inflate(R.layout.fragment_recipe_steps, container, false);
+        Bundle recipeBundle = this.getArguments();
+        if (recipeBundle != null) {
+            mRecipe = recipeBundle.getParcelable(MainActivity.RECIPE_KEY);
         }
-        recipesTextView.setText(builder.toString());*/
 
+       /* Log.d(LOG_TAG, "Recipe passed: " + mRecipe.getName()
+                + ", no. of steps: " + String.valueOf(mRecipe.getSteps().size())
+                + ", no. of ingredients " + String.valueOf(mRecipe.getIngredients().size()));*/
+        ArrayList<Ingredient> ingredientList = mRecipe.getIngredients();
+        for (int i = 0; i < ingredientList.size(); i++) {
 
-                return view;
+            Log.d(LOG_TAG, "" + ingredientList.get(i).getIngredient());
+        }
+
+        recipesTextView = view.findViewById(R.id.tv_ingredients_list);
+
+        StringBuilder builder = new StringBuilder();
+        for (Ingredient ingredient : mRecipe.getIngredients()) {
+            builder.append(ingredient.getIngredient() + "\n");
+        }
+        recipesTextView.setText(builder.toString());
+
+        mRecyclerView = view.findViewById(R.id.rv_recipe_steps);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this.getActivity());
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setAdapter(new RecipeStepsAdapter(mRecipe));
+
+        return view;
     }
 
    /* // TODO: Rename method, update argument and hook method into UI event
@@ -91,7 +98,7 @@ public class RecipeStepsFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-      /*  mListener = null;*/
+        /*  mListener = null;*/
     }
 
     /**

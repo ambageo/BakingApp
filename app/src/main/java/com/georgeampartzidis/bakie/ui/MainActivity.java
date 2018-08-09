@@ -125,12 +125,7 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
     @Override
     public void onRecipeClick(int clickedRecipePosition) {
         Recipe recipe= mRecipeArrayList.get(clickedRecipePosition);
-       /* ArrayList<Ingredient> ingredientsList= recipe.getIngredients();
-        for(Ingredient ingredient: ingredientsList){
-            Log.d(LOG_TAG, "Ingredient: " + ingredient.getIngredient() + "\n");
-        }*/
-        Toast.makeText(this, "Clicked on "
-                + recipe.getName(), Toast.LENGTH_SHORT).show();
+      Log.d(LOG_TAG, "Clicked on recipe: " + recipe.getName());
         Intent recipeIntent= new Intent(this, RecipeActivity.class);
         recipeIntent.putExtra(RECIPE_KEY, recipe);
         startActivity(recipeIntent);
