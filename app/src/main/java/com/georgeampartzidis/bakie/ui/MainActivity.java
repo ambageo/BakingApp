@@ -63,8 +63,6 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Toast.makeText(getApplicationContext(),
-                                "Response: " + String.valueOf(response.length()), Toast.LENGTH_SHORT).show();
                         for (int i = 0; i < response.length(); i++)
                             try {
                                 JSONObject jsonRecipe = response.getJSONObject(i);

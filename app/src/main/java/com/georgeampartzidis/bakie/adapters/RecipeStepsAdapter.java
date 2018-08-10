@@ -21,11 +21,16 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private final static String TAG = RecipeStepsAdapter.class.getSimpleName();
     private static final int TYPE_INGREDIENTS_LIST = 0;
     private static final int TYPE_RECIPE_STEP = 1;
+    final private StepClickListener mOnClickListener;
     Recipe mRecipe;
 
+    public interface StepClickListener{
+        void onStepClick(int clickedItemIndex);
+    }
 
-    public RecipeStepsAdapter(Recipe recipe) {
+    public RecipeStepsAdapter(Recipe recipe, StepClickListener listener) {
         this.mRecipe = recipe;
+        mOnClickListener= listener;
         Log.d(TAG, "Creating the Adapter...");
     }
 
@@ -102,12 +107,20 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
-    public class RecipeStepsViewHolder extends RecyclerView.ViewHolder {
+    public class RecipeStepsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView recipeStepTextView;
 
         public RecipeStepsViewHolder(View itemView) {
             super(itemView);
             recipeStepTextView = itemView.findViewById(R.id.tv_recipe_step);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int clickedPosition= getAdapterPosition();
+            // When clicking, passing the clicked item's position
+            mOnClickListener.onStepClick(clickedPosition);
         }
     }
 }
