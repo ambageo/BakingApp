@@ -89,6 +89,9 @@ public class RecipeStepsFragment extends Fragment implements RecipeStepsAdapter.
                 + mRecipeName + ", step clicked: " + stepClicked;
         mToast= Toast.makeText(getActivity(), toastMessage, Toast.LENGTH_SHORT);
         mToast.show();
+
+// TODO: Establish communication between the Fragment and the RecipeActivity.
+// Then the Activity communicates with the StepDetailsFragment to show the details (video etc)
     }
 
     /**
