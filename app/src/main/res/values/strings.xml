@@ -8,4 +8,7 @@
     <string name="ingredients_title">Ingredients</string>
     <string name="ingredients_list_placeholder">List of ingredients goes here</string>
     <string name="recipe_step_placeholder">Here goes the recipe step</string>
+    <string name="recipe_step_details_placeholder">here goes the detailed step description</string>
+    <string name="previous_step">previous step</string>
+    <string name="next_step">next step</string>
 </resources>

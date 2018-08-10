@@ -6,4 +6,5 @@
     <color name="colorBackground">#FFF3E0</color>
 
     <color name="colorListItem">#FFC107</color>
+    <color name="colorButton">#FFC107</color>
 </resources>
