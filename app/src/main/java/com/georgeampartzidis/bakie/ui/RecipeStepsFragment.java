@@ -25,7 +25,6 @@ import java.util.ArrayList;
 public class RecipeStepsFragment extends Fragment {
 
     private static final String LOG_TAG = RecipeStepsFragment.class.getSimpleName();
-    private TextView recipesTextView;
     private Recipe mRecipe;
     private RecyclerView mRecyclerView;
 
@@ -52,23 +51,6 @@ public class RecipeStepsFragment extends Fragment {
             mRecipe = recipeBundle.getParcelable(MainActivity.RECIPE_KEY);
         }
 
-       /* Log.d(LOG_TAG, "Recipe passed: " + mRecipe.getName()
-                + ", no. of steps: " + String.valueOf(mRecipe.getSteps().size())
-                + ", no. of ingredients " + String.valueOf(mRecipe.getIngredients().size()));*/
-        ArrayList<Ingredient> ingredientList = mRecipe.getIngredients();
-        for (int i = 0; i < ingredientList.size(); i++) {
-
-            Log.d(LOG_TAG, "" + ingredientList.get(i).getIngredient());
-        }
-
-        recipesTextView = view.findViewById(R.id.tv_ingredients_list);
-
-        StringBuilder builder = new StringBuilder();
-        for (Ingredient ingredient : mRecipe.getIngredients()) {
-            builder.append(ingredient.getIngredient() + "\n");
-        }
-        recipesTextView.setText(builder.toString());
-
         mRecyclerView = view.findViewById(R.id.rv_recipe_steps);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getActivity());
         mRecyclerView.setLayoutManager(layoutManager);
@@ -76,13 +58,6 @@ public class RecipeStepsFragment extends Fragment {
 
         return view;
     }
-
-   /* // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }*/
 
     @Override
     public void onAttach(Context context) {

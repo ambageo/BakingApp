@@ -6,7 +6,7 @@
     tools:context=".ui.RecipeStepsFragment"
     android:orientation="vertical">
 
-    <LinearLayout
+  <!--  <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -24,7 +24,7 @@
             android:id="@+id/tv_ingredients_list"
             tools:text="@string/ingredients_list_placeholder"
             android:layout_marginLeft="@dimen/vertical_margin" />
-    </LinearLayout>
+    </LinearLayout>-->
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
