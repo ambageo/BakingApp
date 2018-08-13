@@ -92,7 +92,8 @@ public class RecipeStepsFragment extends Fragment implements RecipeStepsAdapter.
         int stepClickedIndex= clickedItemIndex -1;
         String stepClicked= mStepsList.get(stepClickedIndex).getShortDescription();
         String toastMessage= "Recipe : "
-                + mRecipeName + ", step clicked: " + stepClicked;
+                + mRecipeName + ", step clicked: " + stepClicked + ", no: "
+                + String.valueOf(mStepsList.get(stepClickedIndex).getId());
         mToast= Toast.makeText(getActivity(), toastMessage, Toast.LENGTH_SHORT);
         mToast.show();
         Step step= mStepsList.get(stepClickedIndex);

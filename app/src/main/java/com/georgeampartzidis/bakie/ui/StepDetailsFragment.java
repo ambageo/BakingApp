@@ -7,10 +7,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.georgeampartzidis.bakie.R;
@@ -36,12 +38,16 @@ import com.google.android.exoplayer2.util.Util;
 
 
 public class StepDetailsFragment extends Fragment {
-    private static final String TAG= StepDetailsFragment.class.getSimpleName();
+    private static final String TAG = StepDetailsFragment.class.getSimpleName();
     private static final String PLAYER_STATE = "player-state";
     private TextView descriptionTextVIew;
     private PlayerView playerView;
     private SimpleExoPlayer player;
     private long playerPosition;
+    private boolean hasNoVideoUrl;
+    private Button previousButton;
+    private Button nextButton;
+    private int stepId;
 
     public StepDetailsFragment() {
         // Required empty public constructor
@@ -61,7 +67,7 @@ public class StepDetailsFragment extends Fragment {
             if (savedInstanceState.containsKey(PLAYER_STATE)) {
                 playerPosition = savedInstanceState.getLong(PLAYER_STATE);
                 Log.d(TAG, "We have a saved instance..." +
-                String.valueOf(playerPosition));
+                        String.valueOf(playerPosition));
             } else {
                 playerPosition = C.TIME_UNSET;
             }
@@ -70,8 +76,12 @@ public class StepDetailsFragment extends Fragment {
         RecipeDetailsViewModel model = ViewModelProviders
                 .of(getActivity()).get(RecipeDetailsViewModel.class);
         Step step = model.getStep();
+        stepId = step.getId();
         String detailedDescription = step.getDetailedDescription();
         descriptionTextVIew.setText(detailedDescription);
+        if (step.getVideoUrl().isEmpty()) {
+            hasNoVideoUrl = true;
+        }
         initializePlayer(Uri.parse(step.getVideoUrl()));
     }
 
@@ -82,7 +92,26 @@ public class StepDetailsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_step_details, container, false);
         descriptionTextVIew = view.findViewById(R.id.tv_step_details);
         playerView = view.findViewById(R.id.playerView);
+        previousButton = view.findViewById(R.id.bt_previous_step);
+        nextButton = view.findViewById(R.id.bt_next_step);
 
+
+        previousButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (stepId > 0) {
+                    stepId--;
+                }
+            }
+        });
+
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(stepId< )
+            }
+        });
         return view;
     }
 
@@ -96,6 +125,12 @@ public class StepDetailsFragment extends Fragment {
             MediaSource mediaSource = new ExtractorMediaSource.Factory(
                     new DefaultHttpDataSourceFactory("BakingApp")).createMediaSource(uri);
 
+            if (hasNoVideoUrl) {
+                Log.d(TAG, "No video available");
+                playerView.setForeground(ContextCompat.getDrawable(getContext(),
+                        R.drawable.no_video_available));
+            }
+
 
             if (playerPosition != C.TIME_UNSET) {
                 player.seekTo(playerPosition);
@@ -105,6 +140,7 @@ public class StepDetailsFragment extends Fragment {
             player.setPlayWhenReady(true);
         }
     }
+
 
     @Override
     public void onDetach() {
