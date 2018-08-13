@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.georgeampartzidis.bakie.R;
 import com.georgeampartzidis.bakie.RecipeDetailsViewModel;
 import com.georgeampartzidis.bakie.model.Step;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
@@ -25,19 +27,21 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
 
 public class StepDetailsFragment extends Fragment {
-    private final static String TAG = StepDetailsFragment.class.getSimpleName();
+    private static final String TAG= StepDetailsFragment.class.getSimpleName();
+    private static final String PLAYER_STATE = "player-state";
     private TextView descriptionTextVIew;
     private PlayerView playerView;
     private SimpleExoPlayer player;
-    private BandwidthMeter bandwidthMeter;
-    /* private OnFragmentInteractionListener mListener;*/
+    private long playerPosition;
 
     public StepDetailsFragment() {
         // Required empty public constructor
@@ -47,21 +51,22 @@ public class StepDetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       /* RecipeDetailsViewModel model= ViewModelProviders
-                .of(getActivity()).get(RecipeDetailsViewModel.class);
-        Step step= model.getStep();
-        Log.d(TAG, "Received clicked step: "+ step.getShortDescription());
-        final String detailedDescription= step.getDetailedDescription();
-        descriptionTextVIew.setText(detailedDescription);*/
-
-        if (getArguments() != null) {
-
-        }
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            // Here we check if the video was playing
+            if (savedInstanceState.containsKey(PLAYER_STATE)) {
+                playerPosition = savedInstanceState.getLong(PLAYER_STATE);
+                Log.d(TAG, "We have a saved instance..." +
+                String.valueOf(playerPosition));
+            } else {
+                playerPosition = C.TIME_UNSET;
+            }
+
+        }
         RecipeDetailsViewModel model = ViewModelProviders
                 .of(getActivity()).get(RecipeDetailsViewModel.class);
         Step step = model.getStep();
@@ -82,24 +87,20 @@ public class StepDetailsFragment extends Fragment {
     }
 
 
-
-    /* // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }*/
-
     private void initializePlayer(Uri uri) {
         if (player == null) {
-            TrackSelection.Factory factory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
-            DefaultTrackSelector trackSelector = new DefaultTrackSelector(factory);
-            LoadControl loadControl= new DefaultLoadControl();
-            player = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector,loadControl);
+            TrackSelector trackSelector = new DefaultTrackSelector();
+            LoadControl loadControl = new DefaultLoadControl();
+            player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
             playerView.setPlayer(player);
-            MediaSource mediaSource= new ExtractorMediaSource(uri,
-                    new DefaultDataSourceFactory(getContext(), Util.getUserAgent(getContext(), "BakingApp")),
-                    new DefaultExtractorsFactory(), null, null);
+            MediaSource mediaSource = new ExtractorMediaSource.Factory(
+                    new DefaultHttpDataSourceFactory("BakingApp")).createMediaSource(uri);
+
+
+            if (playerPosition != C.TIME_UNSET) {
+                player.seekTo(playerPosition);
+                Log.d(TAG, "Player position is: " + String.valueOf(playerPosition));
+            }
             player.prepare(mediaSource);
             player.setPlayWhenReady(true);
         }
@@ -108,7 +109,7 @@ public class StepDetailsFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        if (player!=null) {
+        if (player != null) {
             player.stop();
             player.release();
         }
@@ -117,17 +118,17 @@ public class StepDetailsFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (player!=null) {
+        if (player != null) {
             player.stop();
             player.release();
-            player=null;
+            player = null;
         }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (player!=null) {
+        if (player != null) {
             player.stop();
             player.release();
         }
@@ -136,9 +137,19 @@ public class StepDetailsFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        if (player!=null) {
+        if (player != null) {
+            playerPosition = player.getCurrentPosition();
             player.stop();
             player.release();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (player != null) {
+
+            outState.putLong(PLAYER_STATE, playerPosition);
         }
     }
 }
