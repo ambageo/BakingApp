@@ -91,7 +91,17 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
                                 ArrayList<Step> stepsArrayList= new ArrayList<>();
                                 for(int k=0; k<stepsJsonArray.length(); k++){
                                     JSONObject jsonStep= stepsJsonArray.getJSONObject(k);
+                                    int id= jsonStep.getInt("id");
+                                    String shortDescription= jsonStep.optString("shortDescription");
+                                    String detailedDescription= jsonStep.optString("description");
+                                    String videoUrl= jsonStep.optString("videoURL");
+                                    String thumbnailUrl= jsonStep.optString("thumbnailURL");
                                     Step step= new Step(jsonStep);
+                                    step.setId(id);
+                                    step.setShortDescription(shortDescription);
+                                    step.setDetailedDescription(detailedDescription);
+                                    step.setVideoUrl(videoUrl);
+                                    step.setThumbnailUrl(thumbnailUrl);
                                     stepsArrayList.add(step);
 
                                 }

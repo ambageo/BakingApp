@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -96,10 +98,17 @@ public class RecipeStepsFragment extends Fragment implements RecipeStepsAdapter.
         Step step= mStepsList.get(stepClickedIndex);
         model.setStep(step);
 
-// TODO: Establish communication between the Fragment and the RecipeActivity.
-// Then the Activity communicates with the StepDetailsFragment to show the details (video etc)
+        StepDetailsFragment detailsFragment= new StepDetailsFragment();
+        FragmentManager fragmentManager= getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction= fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.recipe_container, detailsFragment, null)
+                .addToBackStack(null)
+                .commit();
+
     }
 
+    // TODO: Establish communication between the Fragment and the RecipeActivity.
+// Then the Activity communicates with the StepDetailsFragment to show the details (video etc)
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
