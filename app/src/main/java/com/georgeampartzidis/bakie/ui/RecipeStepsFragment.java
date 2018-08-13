@@ -1,5 +1,6 @@
 package com.georgeampartzidis.bakie.ui;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.georgeampartzidis.bakie.R;
+import com.georgeampartzidis.bakie.RecipeDetailsViewModel;
 import com.georgeampartzidis.bakie.adapters.RecipeStepsAdapter;
 import com.georgeampartzidis.bakie.model.Ingredient;
 import com.georgeampartzidis.bakie.model.Recipe;
@@ -31,6 +33,7 @@ public class RecipeStepsFragment extends Fragment implements RecipeStepsAdapter.
     private ArrayList<Step> mStepsList;
     private RecyclerView mRecyclerView;
     private Toast mToast;
+    private RecipeDetailsViewModel model;
     /*private OnFragmentInteractionListener mListener;*/
 
     public RecipeStepsFragment() {
@@ -41,6 +44,7 @@ public class RecipeStepsFragment extends Fragment implements RecipeStepsAdapter.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        model= ViewModelProviders.of(getActivity()).get(RecipeDetailsViewModel.class);
 
     }
 
@@ -89,6 +93,8 @@ public class RecipeStepsFragment extends Fragment implements RecipeStepsAdapter.
                 + mRecipeName + ", step clicked: " + stepClicked;
         mToast= Toast.makeText(getActivity(), toastMessage, Toast.LENGTH_SHORT);
         mToast.show();
+        Step step= mStepsList.get(stepClickedIndex);
+        model.setStep(step);
 
 // TODO: Establish communication between the Fragment and the RecipeActivity.
 // Then the Activity communicates with the StepDetailsFragment to show the details (video etc)
