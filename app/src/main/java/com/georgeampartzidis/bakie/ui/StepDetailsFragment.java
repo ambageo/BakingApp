@@ -163,9 +163,9 @@ public class StepDetailsFragment extends Fragment {
 
             player.prepare(mediaSource);
 
+            // If the video was playing before screen rotation, it will continue from where it was
             if (playerPosition != C.TIME_UNSET) {
                 player.seekTo(playerPosition);
-                Log.d(TAG, "Player position inside initializePlayer: " + String.valueOf(playerPosition));
             }
 
             player.setPlayWhenReady(true);
@@ -223,8 +223,8 @@ public class StepDetailsFragment extends Fragment {
     public void onPause() {
         super.onPause();
         if (player != null) {
+            // Get the video position to maintain after screen rotation
             playerPosition = player.getCurrentPosition();
-            Log.d(TAG, "player position is: " + String.valueOf(playerPosition));
             player.stop();
             player.release();
         }
@@ -234,7 +234,6 @@ public class StepDetailsFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (player != null) {
-            Log.d(TAG, "player position that is saved is: " + String.valueOf(playerPosition));
             outState.putLong(PLAYER_STATE, playerPosition);
         }
     }
