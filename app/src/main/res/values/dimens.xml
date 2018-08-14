@@ -8,4 +8,6 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="button_padding">8dp</dimen>
     <dimen name="button_elevation">8dp</dimen>
+    <dimen name="step_description_text_size">18sp</dimen>
+    <dimen name="step_details_margin">8dp</dimen>
 </resources>

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.georgeampartzidis.bakie.R;
 import com.georgeampartzidis.bakie.RecipeDetailsViewModel;
+import com.georgeampartzidis.bakie.model.Recipe;
 import com.georgeampartzidis.bakie.model.Step;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -36,10 +37,19 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import java.util.ArrayList;
+
 
 public class StepDetailsFragment extends Fragment {
     private static final String TAG = StepDetailsFragment.class.getSimpleName();
     private static final String PLAYER_STATE = "player-state";
+
+    private Recipe mRecipe;
+    private ArrayList<Step> mStepsList;
+    private Step mStep;
+    private int stepId;
+    private String mDetailedDescription;
+
     private TextView descriptionTextVIew;
     private PlayerView playerView;
     private SimpleExoPlayer player;
@@ -47,7 +57,7 @@ public class StepDetailsFragment extends Fragment {
     private boolean hasNoVideoUrl;
     private Button previousButton;
     private Button nextButton;
-    private int stepId;
+
 
     public StepDetailsFragment() {
         // Required empty public constructor
@@ -66,8 +76,7 @@ public class StepDetailsFragment extends Fragment {
             // Here we check if the video was playing
             if (savedInstanceState.containsKey(PLAYER_STATE)) {
                 playerPosition = savedInstanceState.getLong(PLAYER_STATE);
-                Log.d(TAG, "We have a saved instance..." +
-                        String.valueOf(playerPosition));
+                Log.d(TAG, "The saved instance of the video is :" + String.valueOf(playerPosition));
             } else {
                 playerPosition = C.TIME_UNSET;
             }
@@ -75,14 +84,17 @@ public class StepDetailsFragment extends Fragment {
         }
         RecipeDetailsViewModel model = ViewModelProviders
                 .of(getActivity()).get(RecipeDetailsViewModel.class);
-        Step step = model.getStep();
-        stepId = step.getId();
-        String detailedDescription = step.getDetailedDescription();
-        descriptionTextVIew.setText(detailedDescription);
-        if (step.getVideoUrl().isEmpty()) {
+        mRecipe = model.getRecipe();
+        mStepsList = mRecipe.getSteps();
+        stepId = model.getmRecipeStep();
+        mStep = mStepsList.get(stepId);
+
+        mDetailedDescription = mStepsList.get(stepId).getDetailedDescription();
+        descriptionTextVIew.setText(mDetailedDescription);
+        if (mStep.getVideoUrl().isEmpty()) {
             hasNoVideoUrl = true;
         }
-        initializePlayer(Uri.parse(step.getVideoUrl()));
+        initializePlayer(Uri.parse(mStep.getVideoUrl()));
     }
 
     @Override
@@ -102,6 +114,13 @@ public class StepDetailsFragment extends Fragment {
             public void onClick(View v) {
                 if (stepId > 0) {
                     stepId--;
+                    mStep = mStepsList.get(stepId);
+                    String videoUrl = mStep.getVideoUrl();
+                    playerPosition = C.TIME_UNSET;
+                    mDetailedDescription = mStepsList.get(stepId).getDetailedDescription();
+                    descriptionTextVIew.setText(mDetailedDescription);
+                    checkStepVideoUrl(videoUrl);
+                    initializePlayer(Uri.parse(videoUrl));
                 }
             }
         });
@@ -109,7 +128,16 @@ public class StepDetailsFragment extends Fragment {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(stepId< )
+                if (stepId < mStepsList.size() - 1) {
+                    stepId++;
+                    mStep = mStepsList.get(stepId);
+                    String videoUrl = mStep.getVideoUrl();
+                    playerPosition = C.TIME_UNSET;
+                    mDetailedDescription = mStepsList.get(stepId).getDetailedDescription();
+                    descriptionTextVIew.setText(mDetailedDescription);
+                    checkStepVideoUrl(videoUrl);
+                    initializePlayer(Uri.parse(videoUrl));
+                }
             }
         });
         return view;
@@ -129,18 +157,39 @@ public class StepDetailsFragment extends Fragment {
                 Log.d(TAG, "No video available");
                 playerView.setForeground(ContextCompat.getDrawable(getContext(),
                         R.drawable.no_video_available));
+            } else {
+                playerView.setForeground(null);
             }
 
+            player.prepare(mediaSource);
 
             if (playerPosition != C.TIME_UNSET) {
                 player.seekTo(playerPosition);
-                Log.d(TAG, "Player position is: " + String.valueOf(playerPosition));
+                Log.d(TAG, "Player position inside initializePlayer: " + String.valueOf(playerPosition));
             }
-            player.prepare(mediaSource);
+
             player.setPlayWhenReady(true);
         }
     }
 
+    public void releasePlayer() {
+        player.stop();
+        player.release();
+        player = null;
+    }
+
+    public void checkStepVideoUrl(String videoUrl) {
+        if (videoUrl.isEmpty()) {
+            hasNoVideoUrl = true;
+        } else {
+            hasNoVideoUrl = false;
+        }
+        if (player != null) {
+            releasePlayer();
+        } else {
+            hasNoVideoUrl = false;
+        }
+    }
 
     @Override
     public void onDetach() {
@@ -175,6 +224,7 @@ public class StepDetailsFragment extends Fragment {
         super.onPause();
         if (player != null) {
             playerPosition = player.getCurrentPosition();
+            Log.d(TAG, "player position is: " + String.valueOf(playerPosition));
             player.stop();
             player.release();
         }
@@ -184,7 +234,7 @@ public class StepDetailsFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (player != null) {
-
+            Log.d(TAG, "player position that is saved is: " + String.valueOf(playerPosition));
             outState.putLong(PLAYER_STATE, playerPosition);
         }
     }

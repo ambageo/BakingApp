@@ -4,6 +4,7 @@ import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -26,19 +27,14 @@ public class RecipeActivity extends AppCompatActivity {
 
            Recipe recipe= getIntent().getExtras().getParcelable(MainActivity.RECIPE_KEY);
            String recipeString= recipe.getName();
+
+            Toolbar toolbar= findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle(recipeString);
+
             ArrayList<Ingredient> ingredientsList= recipe.getIngredients();
             Log.d(LOG_TAG, "Recipe clicked is: " + recipeString);
 
-            /*if (bundle.containsKey(MainActivity.RECIPE_KEY)){
-                Recipe recipe= bundle.getParcelable(MainActivity.RECIPE_KEY);
-                String recipeString= recipe.getName();
-                int recipeNoOfIngredients= recipe.getIngredients().size();
-                int recipeNoOfSteps= recipe.getSteps().size();
-
-               *//* Toast.makeText(this, "Recipe: " + recipeString +
-                        ", No. of ingredients: " + String.valueOf(recipeNoOfIngredients)
-                + ", No. of steps: " + String.valueOf(recipeNoOfSteps), Toast.LENGTH_LONG).show();*//*
-            }*/
 
             RecipeStepsFragment recipeSteps= new RecipeStepsFragment();
             Bundle recipeBundle= new Bundle();
@@ -50,6 +46,9 @@ public class RecipeActivity extends AppCompatActivity {
                     .add(R.id.recipe_container, recipeSteps)
                     .commit();
         }
+
+
+
 
     }
 

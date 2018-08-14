@@ -68,7 +68,6 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             if(position<stepsList.size() +1){
                 Step step = stepsList.get(position -1);
                 String shortDescription = step.getShortDescription();
-                Log.d(TAG, "Adding step in position: " + String.valueOf(position) + ", " + shortDescription);
                 ((RecipeStepsViewHolder) holder).recipeStepTextView.setText(shortDescription);
             }
 
@@ -93,7 +92,6 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        Log.d(TAG, "Size of Items: " + mRecipe.getSteps().size());
         return mRecipe.getSteps().size() + 1;
     }
 

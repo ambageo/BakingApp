@@ -3,18 +3,29 @@ package com.georgeampartzidis.bakie;
 import android.arch.lifecycle.ViewModel;
 import android.util.Log;
 
+
+import com.georgeampartzidis.bakie.model.Recipe;
 import com.georgeampartzidis.bakie.model.Step;
 
 public class RecipeDetailsViewModel extends ViewModel {
     private static final String TAG = RecipeDetailsViewModel.class.getSimpleName();
-    private Step mStep;
+    private Recipe mRecipe;
+    private int mRecipeStep;
 
-    public Step getStep() {
-        return mStep;
+    public Recipe getRecipe() {
+        return mRecipe;
     }
 
-    public void setStep(Step step) {
-        this.mStep = step;
+    public void setRecipe(Recipe recipe) {
+        this.mRecipe = recipe;
+    }
 
+
+    public int getmRecipeStep() {
+        return mRecipeStep;
+    }
+
+    public void setmRecipeStep(int recipeStep){
+        this.mRecipeStep= recipeStep;
     }
 }

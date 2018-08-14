@@ -96,8 +96,8 @@ public class RecipeStepsFragment extends Fragment implements RecipeStepsAdapter.
                 + String.valueOf(mStepsList.get(stepClickedIndex).getId());
         mToast= Toast.makeText(getActivity(), toastMessage, Toast.LENGTH_SHORT);
         mToast.show();
-        Step step= mStepsList.get(stepClickedIndex);
-        model.setStep(step);
+        model.setRecipe(mRecipe);
+        model.setmRecipeStep(stepClickedIndex);
 
         StepDetailsFragment detailsFragment= new StepDetailsFragment();
         FragmentManager fragmentManager= getActivity().getSupportFragmentManager();

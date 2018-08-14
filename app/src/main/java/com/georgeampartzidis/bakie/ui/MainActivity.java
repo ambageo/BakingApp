@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -42,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar= findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         mRecyclerView = findViewById(R.id.rv_recipes);
         mRecipeArrayList = new ArrayList<>();
@@ -82,10 +85,10 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
                                     ingredient.setIngredient(ingredientString);
                                     ingredientsArrayList.add(ingredient);
 
-                                    Log.d(LOG_TAG, "Ingredient added: "
+                                    /*Log.d(LOG_TAG, "Ingredient added: "
                                     + String.valueOf(quantity) + " "
                                     + measure + " "
-                                    + ingredientString);
+                                    + ingredientString);*/
                                 }
 
                                 ArrayList<Step> stepsArrayList= new ArrayList<>();
@@ -109,9 +112,9 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
                                 recipe.setIngredients(ingredientsArrayList);
                                 recipe.setSteps(stepsArrayList);
                                 mRecipeArrayList.add(recipe);
-                                Log.i(LOG_TAG, "Recipe added: " + recipe.getName()
+                               /* Log.i(LOG_TAG, "Recipe added: " + recipe.getName()
                                 + " ingredients: " + String.valueOf(recipe.getIngredients().size())
-                                + " steps: " + String.valueOf(recipe.getSteps().size()));
+                                + " steps: " + String.valueOf(recipe.getSteps().size()));*/
                                 mRecipeAdapter.notifyDataSetChanged();
                             } catch (Exception e) {
                                 e.printStackTrace();
