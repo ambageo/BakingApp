@@ -4,6 +4,9 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 public class IngredientsListFactory implements RemoteViewsService.RemoteViewsFactory{
+    /**
+     * The RemoteViewsFactory acts as the adapter providing the data to the widget
+     */
     @Override
     public void onCreate() {
 

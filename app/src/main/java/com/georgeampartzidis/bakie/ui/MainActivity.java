@@ -21,6 +21,7 @@ import com.georgeampartzidis.bakie.adapters.RecipeAdapter;
 import com.georgeampartzidis.bakie.model.Recipe;
 import com.georgeampartzidis.bakie.model.Ingredient;
 import com.georgeampartzidis.bakie.model.Step;
+import com.georgeampartzidis.bakie.utils.Preferences;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -136,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
     @Override
     public void onRecipeClick(int clickedRecipePosition) {
         Recipe recipe= mRecipeArrayList.get(clickedRecipePosition);
+        Preferences.saveRecipe(this, recipe);
         Intent recipeIntent= new Intent(this, RecipeActivity.class);
         recipeIntent.putExtra(RECIPE_KEY, recipe);
         startActivity(recipeIntent);
