@@ -7,14 +7,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.georgeampartzidis.bakie.R;
 import com.georgeampartzidis.bakie.adapters.RecipeAdapter;
@@ -22,9 +19,9 @@ import com.georgeampartzidis.bakie.model.Recipe;
 import com.georgeampartzidis.bakie.model.Ingredient;
 import com.georgeampartzidis.bakie.model.Step;
 import com.georgeampartzidis.bakie.utils.Preferences;
+import com.georgeampartzidis.bakie.widget.RecipeWidgetService;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -113,9 +110,6 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
                                 recipe.setIngredients(ingredientsArrayList);
                                 recipe.setSteps(stepsArrayList);
                                 mRecipeArrayList.add(recipe);
-                               /* Log.i(LOG_TAG, "Recipe added: " + recipe.getName()
-                                + " ingredients: " + String.valueOf(recipe.getIngredients().size())
-                                + " steps: " + String.valueOf(recipe.getSteps().size()));*/
                                 mRecipeAdapter.notifyDataSetChanged();
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -138,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
     public void onRecipeClick(int clickedRecipePosition) {
         Recipe recipe= mRecipeArrayList.get(clickedRecipePosition);
         Preferences.saveRecipe(this, recipe);
+        RecipeWidgetService.updateWidget(this, recipe);
         Intent recipeIntent= new Intent(this, RecipeActivity.class);
         recipeIntent.putExtra(RECIPE_KEY, recipe);
         startActivity(recipeIntent);

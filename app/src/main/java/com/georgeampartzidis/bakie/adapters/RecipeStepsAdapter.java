@@ -31,7 +31,6 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public RecipeStepsAdapter(Recipe recipe, StepClickListener listener) {
         this.mRecipe = recipe;
         mOnClickListener= listener;
-        Log.d(TAG, "Creating the Adapter...");
     }
 
 
@@ -41,12 +40,10 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             //return new IngredientsViewHolder(null);
             View view= LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.layout_ingredients, parent,false);
-            Log.d(TAG, "Creating an Ingredients ViewHolder");
             return new IngredientsViewHolder(view);
         } else if (viewType == TYPE_RECIPE_STEP) {
             View view= LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.layout_recipe_step, parent, false);
-            Log.d(TAG, "Creating a Steps ViewHolder");
             return new RecipeStepsViewHolder(view);
         }
         throw new RuntimeException("No type of holder matching type " + String.valueOf(viewType));

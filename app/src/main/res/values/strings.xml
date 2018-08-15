@@ -10,6 +10,7 @@
     <string name="recipe_step_details_placeholder">here goes the detailed step description</string>
     <string name="previous_step">previous step</string>
     <string name="next_step">next step</string>
-    <string name="appwidget_text">Ingredients list</string>
+    <string name="appwidget_ingredients">Ingredients list</string>
     <string name="add_widget">Add widget</string>
+    <string name="appwidget_recipe">Recipe Name</string>
 </resources>
