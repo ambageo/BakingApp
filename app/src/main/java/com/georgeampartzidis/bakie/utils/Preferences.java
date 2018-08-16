@@ -31,7 +31,6 @@ public class Preferences {
         Gson gson = new Gson();
         String recipeJson = sharedPreferences.getString(RECIPE, null);
         Recipe recipe = gson.fromJson(recipeJson, Recipe.class);
-        Log.d(TAG, "Recipe loaded: " + recipe.getName());
         return recipe;
     }
 

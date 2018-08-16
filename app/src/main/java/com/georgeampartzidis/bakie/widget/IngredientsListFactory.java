@@ -47,7 +47,6 @@ public class IngredientsListFactory implements RemoteViewsService.RemoteViewsFac
         recipe = Preferences.loadRecipe(mContext);
         Log.d(TAG, "Data is loaded from onDataSetChanged");
         ingredientsList= recipe.getIngredients();
-        Log.d(TAG, "Data changed");
     }
 
     @Override
@@ -57,7 +56,8 @@ public class IngredientsListFactory implements RemoteViewsService.RemoteViewsFac
 
     @Override
     public int getCount() {
-        Log.d(TAG, "Number of ingredients: " + String.valueOf(ingredientsList.size()));
+        Log.d(TAG, "Number of ingredients for "
+                + recipe.getName() + " :" + String.valueOf(ingredientsList.size()));
         return recipe.getIngredients().size();
 
     }
@@ -65,8 +65,10 @@ public class IngredientsListFactory implements RemoteViewsService.RemoteViewsFac
     @Override
     public RemoteViews getViewAt(int position) {
         RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.recipe_widget_provider);
-        rv.setTextViewText(R.id.widget_ingredients, ingredientsList.get(position).getIngredient());
-        Log.d(TAG, "Ingredient: " + ingredientsList.get(position).getIngredient());
+        String ingredient= ingredientsList.get(position).getIngredient();
+        rv.setTextViewText(R.id.widget_ingredients, ingredient);
+        Log.d(TAG, "position: " + position
+                + ", Ingredient: " + ingredient);
         return rv;
     }
 

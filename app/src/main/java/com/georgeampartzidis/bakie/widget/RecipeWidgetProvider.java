@@ -25,7 +25,7 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
         Recipe recipe= Preferences.loadRecipe(context);
-
+        Log.d(TAG, "Successfully loaded the recipe for " + recipe.getName());
         Intent ingredientsIntent= new Intent(context, RecipeWidgetService.class);
         ingredientsIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 

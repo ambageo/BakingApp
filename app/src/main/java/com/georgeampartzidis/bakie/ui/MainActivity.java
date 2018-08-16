@@ -136,6 +136,8 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
     public void onRecipeClick(int clickedRecipePosition) {
         Recipe recipe= mRecipeArrayList.get(clickedRecipePosition);
         Preferences.saveRecipe(this, recipe);
+
+        // Broadcast the changes to the WidgetProvider
         Intent notifyWidgetIntent= new Intent(this, RecipeWidgetProvider.class);
         notifyWidgetIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         int[] ids=AppWidgetManager.getInstance(getApplication())
