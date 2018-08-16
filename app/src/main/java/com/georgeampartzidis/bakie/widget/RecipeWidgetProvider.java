@@ -20,18 +20,18 @@ import com.georgeampartzidis.bakie.utils.Preferences;
  */
 public class RecipeWidgetProvider extends AppWidgetProvider {
 
-    public static final String TAG= RecipeWidgetProvider.class.getSimpleName();
+    public static final String TAG = RecipeWidgetProvider.class.getSimpleName();
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
-        Recipe recipe= Preferences.loadRecipe(context);
+        Recipe recipe = Preferences.loadRecipe(context);
         Log.d(TAG, "Successfully loaded the recipe for " + recipe.getName());
-        Intent ingredientsIntent= new Intent(context, RecipeWidgetService.class);
+        Intent ingredientsIntent = new Intent(context, RecipeWidgetService.class);
         ingredientsIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 
         // Create an intent to launch RecipeActivity when clicked
-        Intent intent= new Intent(context, MainActivity.class);
-        PendingIntent pendingIntent= PendingIntent.getActivity(context, 0, intent, 0);
+        Intent intent = new Intent(context, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget_provider);
@@ -60,7 +60,7 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
             Log.d(TAG, "Notifying...");
         }
         super.onUpdate(context, appWidgetManager, appWidgetIds);
-        }
+    }
 
     @Override
     public void onEnabled(Context context) {

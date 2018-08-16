@@ -64,7 +64,7 @@ public class IngredientsListFactory implements RemoteViewsService.RemoteViewsFac
 
     @Override
     public RemoteViews getViewAt(int position) {
-        RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.recipe_widget_provider);
+        RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.widget_list_item);
         String ingredient= ingredientsList.get(position).getIngredient();
         rv.setTextViewText(R.id.widget_ingredients, ingredient);
         Log.d(TAG, "position: " + position
