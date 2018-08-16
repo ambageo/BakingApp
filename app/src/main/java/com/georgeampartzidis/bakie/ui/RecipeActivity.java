@@ -32,9 +32,6 @@ public class RecipeActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle(recipeString);
 
-            ArrayList<Ingredient> ingredientsList= recipe.getIngredients();
-            Log.d(LOG_TAG, "Recipe clicked is: " + recipeString);
-
 
             RecipeStepsFragment recipeSteps= new RecipeStepsFragment();
             Bundle recipeBundle= new Bundle();

@@ -1,5 +1,7 @@
 package com.georgeampartzidis.bakie.ui;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import com.georgeampartzidis.bakie.model.Recipe;
 import com.georgeampartzidis.bakie.model.Ingredient;
 import com.georgeampartzidis.bakie.model.Step;
 import com.georgeampartzidis.bakie.utils.Preferences;
+import com.georgeampartzidis.bakie.widget.RecipeWidgetProvider;
 import com.georgeampartzidis.bakie.widget.RecipeWidgetService;
 
 import org.json.JSONArray;
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
     private RecipeAdapter mRecipeAdapter;
     private ArrayList<Recipe> mRecipeArrayList;
     private RequestQueue requestQueue;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +136,13 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
     public void onRecipeClick(int clickedRecipePosition) {
         Recipe recipe= mRecipeArrayList.get(clickedRecipePosition);
         Preferences.saveRecipe(this, recipe);
-        RecipeWidgetService.updateWidget(this, recipe);
+        Intent notifyWidgetIntent= new Intent(this, RecipeWidgetProvider.class);
+        notifyWidgetIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        int[] ids=AppWidgetManager.getInstance(getApplication())
+                .getAppWidgetIds(new ComponentName(getApplication(), RecipeWidgetProvider.class));
+        notifyWidgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        sendBroadcast(notifyWidgetIntent);
+
         Intent recipeIntent= new Intent(this, RecipeActivity.class);
         recipeIntent.putExtra(RECIPE_KEY, recipe);
         startActivity(recipeIntent);

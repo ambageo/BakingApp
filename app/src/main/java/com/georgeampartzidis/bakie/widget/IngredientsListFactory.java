@@ -1,17 +1,22 @@
 package com.georgeampartzidis.bakie.widget;
 
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.georgeampartzidis.bakie.R;
+import com.georgeampartzidis.bakie.model.Ingredient;
 import com.georgeampartzidis.bakie.model.Recipe;
 import com.georgeampartzidis.bakie.utils.Preferences;
 
-public class IngredientsListFactory implements RemoteViewsService.RemoteViewsFactory{
+import java.util.ArrayList;
 
-    public static final String TAG= IngredientsListFactory.class.getSimpleName();
+public class IngredientsListFactory implements RemoteViewsService.RemoteViewsFactory {
+
+    public static final String TAG = IngredientsListFactory.class.getSimpleName();
     /**
      * The RemoteViewsFactory acts as the adapter providing the data to the widget
      * Explanation for most of the methods in:
@@ -19,13 +24,18 @@ public class IngredientsListFactory implements RemoteViewsService.RemoteViewsFac
      */
     private Context mContext;
     private Recipe recipe;
+    private ArrayList<Ingredient> ingredientsList;
 
     public IngredientsListFactory(Context context) {
         this.mContext = context;
+        ingredientsList= new ArrayList<>();
+
     }
 
     @Override
     public void onCreate() {
+        recipe= Preferences.loadRecipe(mContext);
+        ingredientsList= recipe.getIngredients();
 
     }
 
@@ -34,7 +44,9 @@ public class IngredientsListFactory implements RemoteViewsService.RemoteViewsFac
      */
     @Override
     public void onDataSetChanged() {
-        recipe= Preferences.loadRecipe(mContext);
+        recipe = Preferences.loadRecipe(mContext);
+        Log.d(TAG, "Data is loaded from onDataSetChanged");
+        ingredientsList= recipe.getIngredients();
         Log.d(TAG, "Data changed");
     }
 
@@ -45,14 +57,16 @@ public class IngredientsListFactory implements RemoteViewsService.RemoteViewsFac
 
     @Override
     public int getCount() {
+        Log.d(TAG, "Number of ingredients: " + String.valueOf(ingredientsList.size()));
         return recipe.getIngredients().size();
+
     }
 
     @Override
     public RemoteViews getViewAt(int position) {
-        RemoteViews rv= new RemoteViews(mContext.getPackageName(), R.layout.recipe_widget_provider);
-        rv.setTextViewText(R.id.widget_ingredients, recipe.getIngredients().get(position).getIngredient());
-
+        RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.recipe_widget_provider);
+        rv.setTextViewText(R.id.widget_ingredients, ingredientsList.get(position).getIngredient());
+        Log.d(TAG, "Ingredient: " + ingredientsList.get(position).getIngredient());
         return rv;
     }
 
