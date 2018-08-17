@@ -1,13 +1,10 @@
 package com.georgeampartzidis.bakie;
 
 import android.support.test.espresso.contrib.RecyclerViewActions;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-
 import com.georgeampartzidis.bakie.ui.MainActivity;
-import com.georgeampartzidis.bakie.ui.RecipeActivity;
 
 import org.junit.Rule;
 import org.junit.Test;

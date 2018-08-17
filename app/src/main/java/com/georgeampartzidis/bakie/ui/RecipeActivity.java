@@ -17,22 +17,27 @@ import java.util.ArrayList;
 public class RecipeActivity extends AppCompatActivity {
 
     public static final String LOG_TAG= RecipeActivity.class.getSimpleName();
-    static final String STACK_RECIPE_DETAILS= "stack-recipe-details";
-    static final String STACK_RECIPE_STEPS= "stack-recipe-steps";
+    static final String TOOLBAR_TITLE= "toolbar-title";
+    private String mRecipeString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
 
+        Toolbar toolbar= findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if(savedInstanceState != null) {
+            mRecipeString= savedInstanceState.getString(TOOLBAR_TITLE);
+            getSupportActionBar().setTitle(mRecipeString);
+        }
         if(savedInstanceState== null){
 
            Recipe recipe= getIntent().getExtras().getParcelable(MainActivity.RECIPE_KEY);
-           String recipeString= recipe.getName();
+            mRecipeString= recipe.getName();
 
-            Toolbar toolbar= findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-            getSupportActionBar().setTitle(recipeString);
+
+            getSupportActionBar().setTitle(mRecipeString);
 
             Bundle recipeBundle= new Bundle();
             recipeBundle.putParcelable(MainActivity.RECIPE_KEY, recipe);
@@ -61,5 +66,12 @@ public class RecipeActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(TOOLBAR_TITLE, mRecipeString);
+        Log.d(LOG_TAG, "Toolbar title is " + mRecipeString);
     }
 }
