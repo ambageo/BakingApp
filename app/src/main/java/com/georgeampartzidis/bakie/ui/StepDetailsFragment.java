@@ -262,6 +262,8 @@ public class StepDetailsFragment extends Fragment {
                     + String.valueOf(mStep.getId())
             + " with playerPosition: " + String.valueOf(playerPosition));
         }
+
+        //TODO: Fix maintaining the step and player position correctly
     }
     public static boolean isTablet(Context context) {
         return (context.getResources().getConfiguration().screenLayout
