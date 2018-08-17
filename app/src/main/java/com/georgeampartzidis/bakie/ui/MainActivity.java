@@ -86,17 +86,13 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
                                     long quantity= jsonIngredient.optInt("quantity");
                                     String measure= jsonIngredient.optString("measure");
                                     String ingredientString= jsonIngredient.optString("ingredient");
-                                    //Ingredient ingredient= new Ingredient(quantity, measure, ingredientString);
+
                                     Ingredient ingredient= new Ingredient();
                                     ingredient.setQuantity(quantity);
                                     ingredient.setMeasure(measure);
                                     ingredient.setIngredient(ingredientString);
                                     ingredientsArrayList.add(ingredient);
 
-                                    /*Log.d(LOG_TAG, "Ingredient added: "
-                                    + String.valueOf(quantity) + " "
-                                    + measure + " "
-                                    + ingredientString);*/
                                 }
 
                                 ArrayList<Step> stepsArrayList= new ArrayList<>();
@@ -107,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
                                     String detailedDescription= jsonStep.optString("description");
                                     String videoUrl= jsonStep.optString("videoURL");
                                     String thumbnailUrl= jsonStep.optString("thumbnailURL");
+
                                     Step step= new Step(jsonStep);
                                     step.setId(id);
                                     step.setShortDescription(shortDescription);

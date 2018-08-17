@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -106,6 +107,7 @@ public class StepDetailsFragment extends Fragment {
 
         mDetailedDescription = mStepsList.get(stepId).getDetailedDescription();
         descriptionTextVIew.setText(mDetailedDescription);
+        descriptionTextVIew.setMovementMethod(new ScrollingMovementMethod());
         if (mStep.getVideoUrl().isEmpty()) {
             hasNoVideoUrl = true;
         }

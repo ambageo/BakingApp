@@ -42,7 +42,6 @@ public class RecipeActivity extends AppCompatActivity {
             FragmentManager fragmentManager= getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .add(R.id.fragment_container1, recipeSteps)
-                    //.addToBackStack(STACK_RECIPE_STEPS)
                     .commit();
 
             // Using the tag attribute to determine whether we are in tablet landscape mode
@@ -53,12 +52,14 @@ public class RecipeActivity extends AppCompatActivity {
                 stepDetailsFragment.setArguments(recipeBundle);
                 fragmentManager.beginTransaction()
                         .add(R.id.fragment_container2, stepDetailsFragment)
-                        //.addToBackStack(STACK_RECIPE_DETAILS)
                         .commit();
             }
         }
 
-
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }

@@ -5,6 +5,10 @@
     android:layout_height="100dp"
     style="@style/RecipeCardView">
 
+    <ImageView
+        android:id="@+id/iv_recipe_step_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
     <TextView
         android:id="@+id/tv_recipe_step"
         android:gravity="center"

@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.georgeampartzidis.bakie.R;
 import com.georgeampartzidis.bakie.model.Recipe;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -64,7 +65,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         }
 
         public void bindTo(Recipe recipe) {
+
             recipeTitleTextVIew.setText(recipe.getName());
+            // Check if there is a recipe image. If so, load it in the ImageView
+            String recipeImageString= recipe.getImage();
+            if(!recipeImageString.equals("")){
+                Picasso.get().load(recipeImageString).into(recipeImageView);
+            }
         }
 
         @Override

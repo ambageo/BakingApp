@@ -7,12 +7,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.georgeampartzidis.bakie.R;
 import com.georgeampartzidis.bakie.model.Ingredient;
 import com.georgeampartzidis.bakie.model.Recipe;
 import com.georgeampartzidis.bakie.model.Step;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -51,7 +53,8 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
+        //Depending on whether the holder is for ingredients or recipe steps,
+        // bind the view accordingly
         if (holder instanceof IngredientsViewHolder) {
             ArrayList<Ingredient> ingredientList = mRecipe.getIngredients();
             StringBuilder builder = new StringBuilder();
@@ -65,7 +68,15 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             if(position<stepsList.size() +1){
                 Step step = stepsList.get(position -1);
                 String shortDescription = step.getShortDescription();
+                String recipeStepImageString= step.getThumbnailUrl();
+
+                if(!recipeStepImageString.equals("")){
+                    Picasso.get()
+                            .load(recipeStepImageString)
+                            .into(((RecipeStepsViewHolder) holder).recipeStepImageView);
+                }
                 ((RecipeStepsViewHolder) holder).recipeStepTextView.setText(shortDescription);
+
             }
 
         }
@@ -104,10 +115,12 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public class RecipeStepsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView recipeStepTextView;
+        ImageView recipeStepImageView;
 
         public RecipeStepsViewHolder(View itemView) {
             super(itemView);
             recipeStepTextView = itemView.findViewById(R.id.tv_recipe_step);
+            recipeStepImageView= itemView.findViewById(R.id.iv_recipe_step_image);
             itemView.setOnClickListener(this);
         }
 
