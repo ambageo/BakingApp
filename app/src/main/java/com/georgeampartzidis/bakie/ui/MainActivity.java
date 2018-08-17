@@ -1,8 +1,11 @@
 package com.georgeampartzidis.bakie.ui;
 
 import android.appwidget.AppWidgetManager;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.georgeampartzidis.bakie.R;
+import com.georgeampartzidis.bakie.RecipeDetailsViewModel;
 import com.georgeampartzidis.bakie.adapters.RecipeAdapter;
 import com.georgeampartzidis.bakie.model.Recipe;
 import com.georgeampartzidis.bakie.model.Ingredient;
@@ -39,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
     private RecipeAdapter mRecipeAdapter;
     private ArrayList<Recipe> mRecipeArrayList;
     private RequestQueue requestQueue;
+    private RecipeDetailsViewModel model;
 
 
     @Override
@@ -50,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
 
         mRecyclerView = findViewById(R.id.rv_recipes);
         mRecipeArrayList = new ArrayList<>();
+        model= ViewModelProviders.of(this).get(RecipeDetailsViewModel.class);
 
         sendRecipeRequest();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this,
@@ -137,6 +143,9 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
         Recipe recipe= mRecipeArrayList.get(clickedRecipePosition);
         Preferences.saveRecipe(this, recipe);
 
+        if(isTablet(this)){
+            Log.d(LOG_TAG, "We are on a tablet");
+        }
         // Broadcast the changes to the WidgetProvider
         Intent notifyWidgetIntent= new Intent(this, RecipeWidgetProvider.class);
         notifyWidgetIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
@@ -149,5 +158,11 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
         recipeIntent.putExtra(RECIPE_KEY, recipe);
         startActivity(recipeIntent);
 
+    }
+
+    public static boolean isTablet(Context context) {
+        return (context.getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 }

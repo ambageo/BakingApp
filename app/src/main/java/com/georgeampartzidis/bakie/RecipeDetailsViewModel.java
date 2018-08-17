@@ -18,6 +18,7 @@ public class RecipeDetailsViewModel extends ViewModel {
 
     public void setRecipe(Recipe recipe) {
         this.mRecipe = recipe;
+        Log.d(TAG, "Setting the recipe: " + mRecipe.getName());
     }
 
 

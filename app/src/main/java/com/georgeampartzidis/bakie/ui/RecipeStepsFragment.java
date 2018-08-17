@@ -3,6 +3,7 @@ package com.georgeampartzidis.bakie.ui;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -73,12 +74,7 @@ public class RecipeStepsFragment extends Fragment implements RecipeStepsAdapter.
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-       /* if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }*/
+
     }
 
     @Override
@@ -90,38 +86,28 @@ public class RecipeStepsFragment extends Fragment implements RecipeStepsAdapter.
     @Override
     public void onStepClick(int clickedItemIndex) {
         int stepClickedIndex= clickedItemIndex -1;
-        String stepClicked= mStepsList.get(stepClickedIndex).getShortDescription();
-        String toastMessage= "Recipe : "
-                + mRecipeName + ", step clicked: " + stepClicked + ", no: "
-                + String.valueOf(mStepsList.get(stepClickedIndex).getId());
-        mToast= Toast.makeText(getActivity(), toastMessage, Toast.LENGTH_SHORT);
-        mToast.show();
+
         model.setRecipe(mRecipe);
         model.setmRecipeStep(stepClickedIndex);
 
         StepDetailsFragment detailsFragment= new StepDetailsFragment();
         FragmentManager fragmentManager= getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction= fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.recipe_container, detailsFragment, null)
-                .addToBackStack(null)
-                .commit();
+        if(isTablet(getActivity())){
+            fragmentTransaction.replace(R.id.fragment_container2, detailsFragment, null)
+                    .addToBackStack(null)
+                    .commit();
+        } else {
+            fragmentTransaction.replace(R.id.recipe_container, detailsFragment, null)
+                    .addToBackStack(null)
+                    .commit();
+        }
+
 
     }
-
-    // TODO: Establish communication between the Fragment and the RecipeActivity.
-// Then the Activity communicates with the StepDetailsFragment to show the details (video etc)
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-   /* public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }*/
+    public static boolean isTablet(Context context) {
+        return (context.getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+    }
 }

@@ -17,6 +17,8 @@ import java.util.ArrayList;
 public class RecipeActivity extends AppCompatActivity {
 
     public static final String LOG_TAG= RecipeActivity.class.getSimpleName();
+    static final String STACK_RECIPE_DETAILS= "stack-recipe-details";
+    static final String STACK_RECIPE_STEPS= "stack-recipe-steps";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,19 +34,29 @@ public class RecipeActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle(recipeString);
 
-
-            RecipeStepsFragment recipeSteps= new RecipeStepsFragment();
             Bundle recipeBundle= new Bundle();
             recipeBundle.putParcelable(MainActivity.RECIPE_KEY, recipe);
+
+            RecipeStepsFragment recipeSteps= new RecipeStepsFragment();
             recipeSteps.setArguments(recipeBundle);
             FragmentManager fragmentManager= getSupportFragmentManager();
-
             fragmentManager.beginTransaction()
-                    .add(R.id.recipe_container, recipeSteps)
+                    .add(R.id.fragment_container1, recipeSteps)
+                    //.addToBackStack(STACK_RECIPE_STEPS)
                     .commit();
+
+            // Using the tag attribute to determine whether we are in tablet landscape mode
+            if(findViewById(R.id.recipe_container).getTag()!=null
+                    && findViewById(R.id.recipe_container).getTag().equals("tablet-landscape")){
+                Log.d(LOG_TAG, "tablet-mode");
+                StepDetailsFragment stepDetailsFragment= new StepDetailsFragment();
+                stepDetailsFragment.setArguments(recipeBundle);
+                fragmentManager.beginTransaction()
+                        .add(R.id.fragment_container2, stepDetailsFragment)
+                        //.addToBackStack(STACK_RECIPE_DETAILS)
+                        .commit();
+            }
         }
-
-
 
 
     }

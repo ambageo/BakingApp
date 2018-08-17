@@ -2,6 +2,7 @@ package com.georgeampartzidis.bakie.ui;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -82,11 +83,25 @@ public class StepDetailsFragment extends Fragment {
             }
 
         }
-        RecipeDetailsViewModel model = ViewModelProviders
-                .of(getActivity()).get(RecipeDetailsViewModel.class);
-        mRecipe = model.getRecipe();
+      //  if(isTablet(getContext())){
+            Bundle recipeBundle = this.getArguments();
+            if (recipeBundle != null) {
+                mRecipe = recipeBundle.getParcelable(MainActivity.RECIPE_KEY);
+                stepId= 0;
+            }
+       // }
+        else {
+            RecipeDetailsViewModel model = ViewModelProviders
+                    .of(getActivity()).get(RecipeDetailsViewModel.class);
+            mRecipe = model.getRecipe();
+            stepId = model.getmRecipeStep();
+        }
+
+
+        String recipe= mRecipe.getName();
+        Log.d(TAG, "The recipe name is: " + recipe);
         mStepsList = mRecipe.getSteps();
-        stepId = model.getmRecipeStep();
+
         mStep = mStepsList.get(stepId);
 
         mDetailedDescription = mStepsList.get(stepId).getDetailedDescription();
@@ -236,5 +251,10 @@ public class StepDetailsFragment extends Fragment {
         if (player != null) {
             outState.putLong(PLAYER_STATE, playerPosition);
         }
+    }
+    public static boolean isTablet(Context context) {
+        return (context.getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 }
