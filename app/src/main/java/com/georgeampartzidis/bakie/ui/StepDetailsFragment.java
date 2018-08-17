@@ -56,6 +56,7 @@ public class StepDetailsFragment extends Fragment {
     private PlayerView playerView;
     private SimpleExoPlayer player;
     private long playerPosition;
+    private int mStepPosition;
     private boolean hasNoVideoUrl;
     private Button previousButton;
     private Button nextButton;
@@ -78,7 +79,10 @@ public class StepDetailsFragment extends Fragment {
             // Here we check if the video was playing
             if (savedInstanceState.containsKey(PLAYER_STATE)) {
                 playerPosition = savedInstanceState.getLong(PLAYER_STATE);
-                Log.d(TAG, "The saved instance of the video is :" + String.valueOf(playerPosition));
+                mStepPosition= savedInstanceState.getInt("Step-Id");
+                Log.d(TAG, "The saved instance of the video is :"
+                        + String.valueOf(playerPosition) + " for step : "
+                + String.valueOf(mStepPosition));
             } else {
                 playerPosition = C.TIME_UNSET;
             }
@@ -88,7 +92,8 @@ public class StepDetailsFragment extends Fragment {
             Bundle recipeBundle = this.getArguments();
             if (recipeBundle != null) {
                 mRecipe = recipeBundle.getParcelable(MainActivity.RECIPE_KEY);
-                stepId= 0;
+
+                //stepId= 0;
             }
        // }
         else {
@@ -252,6 +257,10 @@ public class StepDetailsFragment extends Fragment {
         super.onSaveInstanceState(outState);
         if (player != null) {
             outState.putLong(PLAYER_STATE, playerPosition);
+            outState.putInt("Step-Id", mStep.getId());
+            Log.d(TAG, "Saving state of step no : "
+                    + String.valueOf(mStep.getId())
+            + " with playerPosition: " + String.valueOf(playerPosition));
         }
     }
     public static boolean isTablet(Context context) {
