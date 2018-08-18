@@ -145,7 +145,7 @@ public class StepDetailsFragment extends Fragment {
                     mDetailedDescription = mStepsList.get(stepId).getDetailedDescription();
                     descriptionTextVIew.setText(mDetailedDescription);
                     checkStepVideoUrl(videoUrlString);
-                    //initializePlayer(Uri.parse(videoUrlString));
+                    initializePlayer(Uri.parse(videoUrlString));
                 }
             }
         });
@@ -161,7 +161,7 @@ public class StepDetailsFragment extends Fragment {
                     mDetailedDescription = mStepsList.get(stepId).getDetailedDescription();
                     descriptionTextVIew.setText(mDetailedDescription);
                     checkStepVideoUrl(videoUrlString);
-                    //initializePlayer(Uri.parse(videoUrl));
+                    initializePlayer(Uri.parse(videoUrlString));
                 }
             }
         });
@@ -228,11 +228,11 @@ public class StepDetailsFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (player != null) {
+       /* if (player != null) {
             player.stop();
             player.release();
             player = null;
-        }
+        }*/
     }
 
     @Override

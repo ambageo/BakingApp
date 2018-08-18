@@ -39,4 +39,10 @@ public class MainActivityRecyclerViewTest {
         onView(withId(R.id.toolbar)).check(matches(isDisplayed()));
         onView(withText("Yellow Cake")).check(matches(withParent(withId(R.id.toolbar))));
     }
+
+    @Test
+    public void testToolbarText(){
+        onView(withId(R.id.toolbar)).check(matches(isDisplayed()));
+        onView(withText("Bakie")).check(matches(withParent(withId(R.id.toolbar))));
+    }
 }
