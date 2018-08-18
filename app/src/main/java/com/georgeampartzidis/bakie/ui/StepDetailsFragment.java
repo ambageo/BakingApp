@@ -56,6 +56,8 @@ public class StepDetailsFragment extends Fragment {
     private PlayerView playerView;
     private SimpleExoPlayer player;
     private long playerPosition;
+    private boolean isPlayerReady;
+    private String videoUrlString;
     private int mStepPosition;
     private boolean hasNoVideoUrl;
     private Button previousButton;
@@ -80,6 +82,7 @@ public class StepDetailsFragment extends Fragment {
             if (savedInstanceState.containsKey(PLAYER_STATE)) {
                 playerPosition = savedInstanceState.getLong(PLAYER_STATE);
                 mStepPosition= savedInstanceState.getInt("Step-Id");
+                isPlayerReady= savedInstanceState.getBoolean("isPlaying");
                 Log.d(TAG, "The saved instance of the video is :"
                         + String.valueOf(playerPosition) + " for step : "
                 + String.valueOf(mStepPosition));
@@ -137,12 +140,12 @@ public class StepDetailsFragment extends Fragment {
                 if (stepId > 0) {
                     stepId--;
                     mStep = mStepsList.get(stepId);
-                    String videoUrl = mStep.getVideoUrl();
+                    videoUrlString = mStep.getVideoUrl();
                     playerPosition = C.TIME_UNSET;
                     mDetailedDescription = mStepsList.get(stepId).getDetailedDescription();
                     descriptionTextVIew.setText(mDetailedDescription);
-                    checkStepVideoUrl(videoUrl);
-                    initializePlayer(Uri.parse(videoUrl));
+                    checkStepVideoUrl(videoUrlString);
+                    //initializePlayer(Uri.parse(videoUrlString));
                 }
             }
         });
@@ -153,12 +156,12 @@ public class StepDetailsFragment extends Fragment {
                 if (stepId < mStepsList.size() - 1) {
                     stepId++;
                     mStep = mStepsList.get(stepId);
-                    String videoUrl = mStep.getVideoUrl();
+                    videoUrlString = mStep.getVideoUrl();
                     playerPosition = C.TIME_UNSET;
                     mDetailedDescription = mStepsList.get(stepId).getDetailedDescription();
                     descriptionTextVIew.setText(mDetailedDescription);
-                    checkStepVideoUrl(videoUrl);
-                    initializePlayer(Uri.parse(videoUrl));
+                    checkStepVideoUrl(videoUrlString);
+                    //initializePlayer(Uri.parse(videoUrl));
                 }
             }
         });
@@ -190,7 +193,7 @@ public class StepDetailsFragment extends Fragment {
                 player.seekTo(playerPosition);
             }
 
-            player.setPlayWhenReady(true);
+            player.setPlayWhenReady(isPlayerReady);
         }
     }
 
@@ -247,8 +250,17 @@ public class StepDetailsFragment extends Fragment {
         if (player != null) {
             // Get the video position to maintain after screen rotation
             playerPosition = player.getCurrentPosition();
+            isPlayerReady= player.getPlayWhenReady();
             player.stop();
             player.release();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if((Util.SDK_INT <= 23 || player == null)){
+            initializePlayer(Uri.parse(videoUrlString));
         }
     }
 
@@ -257,10 +269,8 @@ public class StepDetailsFragment extends Fragment {
         super.onSaveInstanceState(outState);
         if (player != null) {
             outState.putLong(PLAYER_STATE, playerPosition);
+            outState.putBoolean("isPlaying", isPlayerReady);
             outState.putInt("Step-Id", mStep.getId());
-            Log.d(TAG, "Saving state of step no : "
-                    + String.valueOf(mStep.getId())
-            + " with playerPosition: " + String.valueOf(playerPosition));
         }
 
         //TODO: Fix maintaining the step and player position correctly
